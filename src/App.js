@@ -1,4 +1,7 @@
 import { useState } from "react";
+// import Logo from './components/Logo.js';
+// import From from "./components/From.js";
+// import PackingList from './components/PackingList.js';
 
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
