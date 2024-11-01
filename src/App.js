@@ -3,18 +3,26 @@ import { useState } from "react";
 // import From from "./components/From.js";
 // import PackingList from './components/PackingList.js';
 
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: true },
-  { id: 3, description: "Charger", quantity: 10, packed: false },
-];
+// const initialItems = [
+//   { id: 1, description: "Passports", quantity: 2, packed: false },
+//   { id: 2, description: "Socks", quantity: 12, packed: true },
+//   { id: 3, description: "Charger", quantity: 10, packed: false },
+// ];
 
 const App = () => {
+  const [items, setItems] = useState([]);
+
+  const handleAddItems = (item) => {
+    setItems( (items) => [...items , item])
+    console.log(item)
+  }
+
+
   return (
     <div className="app">
       <Logo />
-      <From />
-      <PackingList />
+      <From onAddItems={handleAddItems}/>
+      <PackingList items={items}/>
       <Stats />
     </div>
   );
@@ -28,7 +36,7 @@ function Logo() {
   );
 }
 
-function From() {
+function From({onAddItems}) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
@@ -38,7 +46,9 @@ function From() {
     if(!description) return;
 
     const newItems = { description, quantity , packed  :false, id : Date.now() }
-    console.log(newItems)
+    // console.log(newItems)
+
+    onAddItems(newItems);
 
     setDescription("");
     setQuantity(1);
@@ -77,11 +87,11 @@ function From() {
   );
 }
 
-function PackingList() {
+function PackingList({ items }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
+        {items.map((item) => (
           <Item key={item.id} item={item} />
         ))}
       </ul>
