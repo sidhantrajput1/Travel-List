@@ -13,16 +13,19 @@ const App = () => {
   const [items, setItems] = useState([]);
 
   const handleAddItems = (item) => {
-    setItems( (items) => [...items , item])
-    console.log(item)
-  }
+    setItems((items) => [...items, item]);
+    console.log(item);
+  };
 
+  const handleDelteItem = (id) => {
+    setItems((items) => items.filter((item) => item.id !== id));
+  };
 
   return (
     <div className="app">
       <Logo />
-      <From onAddItems={handleAddItems}/>
-      <PackingList items={items}/>
+      <From onAddItems={handleAddItems} />
+      <PackingList items={items} onDeleteItems={handleDelteItem}/>
       <Stats />
     </div>
   );
@@ -36,16 +39,16 @@ function Logo() {
   );
 }
 
-function From({onAddItems}) {
+function From({ onAddItems }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    if(!description) return;
+    if (!description) return;
 
-    const newItems = { description, quantity , packed  :false, id : Date.now() }
+    const newItems = { description, quantity, packed: false, id: Date.now() };
     // console.log(newItems)
 
     onAddItems(newItems);
@@ -87,25 +90,25 @@ function From({onAddItems}) {
   );
 }
 
-function PackingList({ items }) {
+function PackingList({ items , onDeleteItems}) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item key={item.id} item={item} />
+          <Item key={item.id} onDeleteItems={onDeleteItems} item={item} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item , onDeleteItems}) {
   return (
     <li>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDeleteItems(item.id)}>❌</button>
     </li>
   );
 }
